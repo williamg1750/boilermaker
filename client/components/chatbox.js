@@ -7,41 +7,66 @@ class Chatbox extends React.Component {
     super()
 
     this.state = {
-      value: ''
+      message: '',
+      handle: ''
     }
     this.handleSubmit = this.handleSubmit.bind(this)
-    this.handleChange = this.handleChange.bind(this)
+    this.handleChangeMessage = this.handleChangeMessage.bind(this)
+    this.handleChangeHandle = this.handleChangeHandle.bind(this)
   }
 
-  handleChange(event) {
+  handleChangeMessage(event) {
     this.setState({
-      value: event.target.value
+      message: event.target.value
+    })
+  }
+
+  handleChangeHandle(event) {
+    this.setState({
+      handle: event.target.value
     })
   }
 
   handleSubmit(event) {
     event.preventDefault()
-    const message = this.state.value
-    this.props.sendMessage(message)
+    const message = this.state.message
+    const handle = this.state.handle
+
+    const newMessage = `${handle}: ${message}`
+
+    this.props.sendMessage(newMessage)
     this.setState({
-      value: ''
+      message: ''
     })
   }
 
   render() {
+    const messages = this.props.chat.messages || []
+    const handle = this.props.chat.handle
+
     return (
       <div id="chat-box">
         <h2>CHATBOX</h2>
         <div id="chat-window">
-          <div id="output">{this.props.messages}</div>
+          <div id="output">
+            {messages.map((message, i) => {
+              return <div key={i}>{message}</div>
+            })}
+          </div>
           <div id="feedback" />
         </div>
-        <input id="handle" type="text" placeholder="Handle" />
+        <input
+          id="handle"
+          type="text"
+          onChange={this.handleChangeHandle}
+          value={this.state.handle}
+          placeholder="Handle"
+        />
         <input
           id="message"
           type="text"
-          onChange={this.handleChange}
-          value={this.state.value}
+          onChange={this.handleChangeMessage}
+          value={this.state.message}
           placeholder="Message"
         />
         <button type="button" id="send" onClick={this.handleSubmit}>
@@ -53,9 +78,8 @@ class Chatbox extends React.Component {
 }
 
 const mapState = state => {
-  console.log(state)
   return {
-    messages: state.chatbox.messages
+    chat: state.chatbox
   }
 }
 

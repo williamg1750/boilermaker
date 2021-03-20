@@ -6,11 +6,10 @@ const NEW_MESSAGE = 'GOT_MESSAGE'
 
 //action creators
 
-export const newMessage = (message, handle) => {
+export const newMessage = message => {
   return {
     type: NEW_MESSAGE,
-    message,
-    handle
+    message
   }
 }
 
@@ -26,8 +25,8 @@ export const sendMessage = message => dispatch => {
 }
 
 const initialState = {
-  messages: [],
-  handle: ''
+  messages: []
+  //handle: ''
 }
 
 //reducer
@@ -37,8 +36,8 @@ export default (state = initialState, action) => {
     case NEW_MESSAGE:
       return {
         ...state,
-        messages: [...state.messages, action.message],
-        handle: action.handle
+        messages: [...state.messages, action.message]
+        //handle: action.handle
       }
     default:
       return state
